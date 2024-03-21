@@ -4,6 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView
 
 from .models import Post
+from .forms import EmailPostForm
 
 
 class PostListView(ListView):
@@ -40,3 +41,19 @@ def post_detail(request, year, month, day, post):
         publish__day=day,
     )
     return render(request, "blog_app/post/detail.html", {"post": post})
+
+
+def post_share(request, post_id):
+    # Pobranie posta na podstawie jego identyfikatora.
+    post = get_object_or_404(Post, id=post_id, status="published")
+
+    if request.method == "POST":
+        # Formularz został wysłany.
+        form = EmailPostForm(request.POST)
+        if form.is_valid():
+            # Weryfikacja pól formularza zakończyła się powodzeniem...
+            cd = form.cleaned_data
+            # ...więc można wysłać wiadomość e-mail.
+        else:
+            form = EmailPostForm()
+        return render(request, "blog_app/post/share.html", {"post": post, "form": form})
