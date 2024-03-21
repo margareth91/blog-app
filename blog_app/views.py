@@ -54,6 +54,6 @@ def post_share(request, post_id):
             # Weryfikacja pól formularza zakończyła się powodzeniem...
             cd = form.cleaned_data
             # ...więc można wysłać wiadomość e-mail.
-        else:
-            form = EmailPostForm()
-        return render(request, "blog_app/post/share.html", {"post": post, "form": form})
+    else:
+        form = EmailPostForm()
+    return render(request, "blog_app/post/share.html", {"post": post, "form": form})
