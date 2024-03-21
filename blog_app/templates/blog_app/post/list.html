@@ -19,6 +19,7 @@
         {{ post.body|truncatewords:30|linebreaks }}
     {% endfor %}
 <!--Include używany do widoku jako funkcji.-->
-<!--    {% include "blog_app/pagination.html" with page=posts %}-->
-    {% include "blog_app/pagination.html" with page=page_obj %}
+    {% include "blog_app/pagination.html" with page=posts %}
+<!--Include używany do widoku jako klasy-->
+<!--    {% include "blog_app/pagination.html" with page=page_obj %}-->
 {% endblock %}
