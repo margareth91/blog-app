@@ -10,6 +10,9 @@
         <p>
             Wysłanie posta "{{ post.title }}" do {{ form.cleaned_data.to }} zakończyło się sukcesem.
         </p>
+        <p>
+            <a href="{{ post.get_absolute_url }}">Wróć do posta</a>
+        </p>
     {% else %}
         <h1>Udostępnij "{{ post.title }}" przez e-mail.</h1>
         <form action="." method="post">
