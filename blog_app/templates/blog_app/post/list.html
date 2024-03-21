@@ -6,6 +6,9 @@
 
 {% block content %}
     <h1>Mój blog</h1>
+        {% if tag %}
+            <h2>Posty oznaczone tagiem "{{ tag.name }}"</h2>
+        {% endif %}
         {% for post in posts %}
         <h2>
             <a href="{{ post.get_absolute_url }}">
