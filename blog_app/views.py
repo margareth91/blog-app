@@ -3,8 +3,8 @@ from django.shortcuts import render, get_object_or_404
 # from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView
 
-from .forms import EmailPostForm
-from .models import Post
+from .forms import EmailPostForm, CommentForm
+from .models import Post, Comment
 
 
 class PostListView(ListView):
@@ -40,7 +40,24 @@ def post_detail(request, year, month, day, post):
         publish__month=month,
         publish__day=day,
     )
-    return render(request, "blog_app/post/detail.html", {"post": post})
+
+    # Lista aktywnych komentarzy dla danego posta.
+    comments = post.comments.filter(active=True)
+
+    if request.method == 'POST':
+        # Komentarz został opublikowany
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            # Utworzenie obiektu Comment bez zapisu w bazie danych.
+            new_comment = comment_form.save(commit=False)
+            # Przypisanie komentarza do bieżącego posta.
+            new_comment.post = post
+            # Zapisanie komentarza w bazie danych.
+            new_comment.save()
+    else:
+        comment_form = CommentForm()
+    return render(request, "blog_app/post/detail.html", {"post": post, 'comments': comments,
+                                                         'comment_form': comment_form})
 
 
 def post_share(request, post_id):
@@ -60,7 +77,6 @@ def post_share(request, post_id):
                        f'{cd['comments']}')
             send_mail(subject, message, 'admin@myblog.com', [cd['to']])
             sent = True
-            # ...więc można wysłać wiadomość e-mail.
     else:
         form = EmailPostForm()
     return render(request, "blog_app/post/share.html", {"post": post, "form": form, "sent": sent})
