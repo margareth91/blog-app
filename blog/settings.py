@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-SIDE_ID = 1
+SITE_ID = 1
 
 # Application definition
 
